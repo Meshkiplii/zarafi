@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Zarafi — Chama Savings & Loans</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08080e;--bg2:#0d0d18;--bg3:#111120;
+  --card:#141425;--card2:#1a1a30;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.12);
+  --gold:#d4a847;--gold2:#f0c96a;--gold-dim:rgba(212,168,71,0.15);
+  --teal:#00c9a7;--teal-dim:rgba(0,201,167,0.12);
+  --red:#ff5e5e;
+  --text:#f0f0f8;--muted:#7878a0;--faint:#2e2e4a;
+  --font-head:'Clash Display',sans-serif;
+  --font-body:'Cabinet Grotesk',sans-serif;
+  --radius:14px;--radius-sm:8px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.65;overflow-x:hidden}
+
+/* grain overlay */
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9000}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:0 6%;display:flex;align-items:center;justify-content:space-between;height:68px;background:rgba(8,8,14,0.8);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);transition:box-shadow .3s}
+nav.scrolled{box-shadow:0 4px 40px rgba(0,0,0,.6)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:32px;height:32px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo-mark svg{width:18px;height:18px;fill:#08080e}
+.logo-name{font-family:var(--font-head);font-size:1.25rem;font-weight:700;color:var(--text);letter-spacing:-.01em}
+.nav-links{display:flex;align-items:center;gap:1.8rem;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.88rem;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-btn{background:var(--gold);color:#08080e;padding:.5rem 1.3rem;border-radius:var(--radius-sm);font-weight:700;font-size:.88rem;text-decoration:none;transition:opacity .2s}
+.nav-btn:hover{opacity:.85}
+.burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.burger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:.3s}
+.mob-nav{display:none;position:fixed;top:68px;left:0;right:0;background:rgba(8,8,14,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:2rem 6%;flex-direction:column;gap:1.4rem;z-index:490}
+.mob-nav.open{display:flex}
+.mob-nav a{color:var(--muted);text-decoration:none;font-size:1.05rem;font-weight:500;transition:color .2s}
+.mob-nav a:hover,.mob-nav a.gold{color:var(--gold)}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;align-items:center;padding:8rem 6% 5rem;position:relative;overflow:hidden}
+.hero-orb1{position:absolute;top:-15%;left:-8%;width:640px;height:640px;border-radius:50%;background:radial-gradient(circle,rgba(212,168,71,.1) 0%,transparent 65%);pointer-events:none}
+.hero-orb2{position:absolute;bottom:-20%;right:-5%;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,rgba(0,201,167,.07) 0%,transparent 65%);pointer-events:none}
+.hero-grid-line{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;mask-image:radial-gradient(ellipse 80% 80% at 50% 0%,black,transparent)}
+.hero-inner{position:relative;max-width:780px}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.6rem;border:1px solid rgba(212,168,71,.3);background:rgba(212,168,71,.06);padding:.3rem 1rem;border-radius:100px;font-size:.78rem;font-weight:600;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;margin-bottom:2rem;animation:riseIn .6s ease both}
+.hero-eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+h1{font-family:var(--font-head);font-size:clamp(3rem,6.5vw,5.5rem);font-weight:700;line-height:1.05;letter-spacing:-.03em;margin-bottom:1.6rem;animation:riseIn .6s .08s ease both}
+h1 em{font-style:normal;color:var(--gold)}
+.hero-sub{font-size:1.12rem;color:var(--muted);max-width:530px;font-weight:300;margin-bottom:2.8rem;animation:riseIn .6s .16s ease both}
+.cta-row{display:flex;gap:1rem;flex-wrap:wrap;animation:riseIn .6s .24s ease both}
+.btn-gold{background:var(--gold);color:#08080e;padding:.9rem 2.2rem;border-radius:var(--radius-sm);font-weight:700;font-size:.95rem;text-decoration:none;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:.5rem;transition:all .2s;letter-spacing:-.01em}
+.btn-gold:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 12px 32px rgba(212,168,71,.3)}
+.btn-ghost{background:transparent;color:var(--text);padding:.9rem 2.2rem;border-radius:var(--radius-sm);font-weight:600;font-size:.95rem;text-decoration:none;border:1px solid var(--border2);cursor:pointer;display:inline-flex;align-items:center;gap:.5rem;transition:all .2s}
+.btn-ghost:hover{border-color:var(--faint);background:rgba(255,255,255,.03)}
+.hero-stats{display:flex;gap:3rem;margin-top:4.5rem;padding-top:3rem;border-top:1px solid var(--border);animation:riseIn .6s .32s ease both;flex-wrap:wrap}
+.stat-val{font-family:var(--font-head);font-size:2.2rem;font-weight:700;color:var(--text);line-height:1}
+.stat-val b{color:var(--gold)}
+.stat-lbl{font-size:.78rem;color:var(--muted);margin-top:.3rem;letter-spacing:.02em}
+@keyframes riseIn{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── SECTIONS ── */
+section{padding:6.5rem 6%}
+.tag{font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem}
+h2{font-family:var(--font-head);font-size:clamp(2rem,4vw,3rem);font-weight:700;line-height:1.12;letter-spacing:-.025em;margin-bottom:.9rem}
+.lead{color:var(--muted);font-size:1.02rem;max-width:560px;font-weight:300}
+.center{text-align:center}.center .lead{margin:0 auto}
+
+/* ── HOW IT WORKS ── */
+#how{background:var(--bg2)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;margin-top:3.5rem}
+.step{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2.2rem;position:relative;overflow:hidden;transition:border-color .3s,transform .3s}
+.step:hover{border-color:rgba(212,168,71,.25);transform:translateY(-4px)}
+.step::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--teal));transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.step:hover::before{transform:scaleX(1)}
+.step-n{font-family:var(--font-head);font-size:3.8rem;font-weight:700;color:var(--faint);line-height:1;margin-bottom:1.3rem}
+.step h3{font-family:var(--font-head);font-size:1.08rem;font-weight:600;margin-bottom:.6rem;color:var(--text)}
+.step p{color:var(--muted);font-size:.9rem;line-height:1.7}
+
+/* ── ABOUT ── */
+#about{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.about-visual{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.acard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.8rem;transition:border-color .3s}
+.acard:hover{border-color:rgba(212,168,71,.2)}
+.acard.span2{grid-column:span 2}
+.acard .big{font-family:var(--font-head);font-size:2.8rem;font-weight:700;color:var(--gold);line-height:1;margin-bottom:.3rem}
+.acard .alab{font-size:.8rem;color:var(--muted);letter-spacing:.03em}
+.acard .icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem}
+.acard .icon.g{background:var(--gold-dim)}
+.acard .icon.t{background:var(--teal-dim)}
+.acard h4{font-family:var(--font-head);font-size:.95rem;font-weight:600;margin-bottom:.4rem}
+.acard p{font-size:.83rem;color:var(--muted);line-height:1.6}
+.about-text ul{list-style:none;margin-top:1.6rem;display:flex;flex-direction:column;gap:.9rem}
+.about-text li{display:flex;align-items:flex-start;gap:.9rem;color:var(--muted);font-size:.93rem}
+.about-text li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:.5rem}
+
+/* ── RULES ── */
+#rules{background:var(--bg3)}
+.rules-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.4rem;margin-top:3.5rem}
+.rule{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.8rem;display:flex;gap:1.1rem;align-items:flex-start;transition:border-color .3s}
+.rule:hover{border-color:rgba(212,168,71,.2)}
+.rule-ico{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem}
+.rule-ico.g{background:var(--gold-dim)}
+.rule-ico.t{background:var(--teal-dim)}
+.rule-ico.r{background:rgba(255,94,94,.1)}
+.rule h3{font-family:var(--font-head);font-size:.98rem;font-weight:600;margin-bottom:.35rem}
+.rule p{font-size:.86rem;color:var(--muted);line-height:1.65}
+
+/* ── LOANS ── */
+#loans{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+.loan-types{display:flex;flex-direction:column;gap:.9rem;margin-top:1.8rem}
+.lt{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.1rem 1.4rem;display:flex;justify-content:space-between;align-items:center;transition:border-color .3s}
+.lt:hover{border-color:rgba(212,168,71,.3)}
+.lt-name{font-family:var(--font-head);font-weight:600;font-size:.95rem}
+.lt-rep{color:var(--muted);font-size:.83rem;text-align:right}
+.elig-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2.2rem}
+.elig-box h3{font-family:var(--font-head);font-size:1.15rem;font-weight:700;margin-bottom:1.4rem}
+.formula{background:rgba(212,168,71,.06);border:1px solid rgba(212,168,71,.2);border-radius:var(--radius-sm);padding:1.4rem;text-align:center;margin-bottom:1.4rem}
+.formula .val{font-family:var(--font-head);font-size:2rem;font-weight:700;color:var(--gold)}
+.formula .sub{font-size:.78rem;color:var(--muted);margin-top:.3rem}
+.elig-note{color:var(--muted);font-size:.88rem;line-height:1.75}
+.elig-note strong{color:var(--text)}
+
+/* ── STRIPE / PAYMENT SECTION ── */
+#payments{background:var(--bg2)}
+.pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-top:3.5rem;align-items:center}
+.pay-features{display:flex;flex-direction:column;gap:1.2rem}
+.pf{display:flex;gap:1.1rem;align-items:flex-start}
+.pf-ico{width:40px;height:40px;border-radius:9px;background:var(--teal-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem}
+.pf h4{font-family:var(--font-head);font-size:.95rem;font-weight:600;margin-bottom:.25rem}
+.pf p{font-size:.85rem;color:var(--muted);line-height:1.6}
+.stripe-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;position:relative;overflow:hidden}
+.stripe-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#635bff,#00c9a7)}
+.stripe-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(99,91,255,.12);border:1px solid rgba(99,91,255,.3);color:#a09bff;padding:.3rem .9rem;border-radius:100px;font-size:.75rem;font-weight:700;margin-bottom:1.2rem;letter-spacing:.05em;text-transform:uppercase}
+.stripe-card h3{font-family:var(--font-head);font-size:1.3rem;font-weight:700;margin-bottom:.5rem}
+.stripe-card p{color:var(--muted);font-size:.88rem;margin-bottom:1.5rem}
+.card-preview{background:linear-gradient(135deg,#1a1a35,#2a1a35);border-radius:12px;padding:1.4rem 1.6rem;margin-bottom:1rem}
+.card-preview .chip{width:28px;height:20px;background:linear-gradient(135deg,#d4a847,#f0c96a);border-radius:4px;margin-bottom:1rem}
+.card-preview .card-num{font-family:monospace;font-size:.95rem;letter-spacing:.1em;color:rgba(255,255,255,.7);margin-bottom:.8rem}
+.card-preview .card-bot{display:flex;justify-content:space-between;font-size:.75rem;color:rgba(255,255,255,.4)}
+.card-preview .mc{display:flex}
+.card-preview .mc-c{width:22px;height:22px;border-radius:50%}
+.card-preview .mc-c:first-child{background:#eb001b;margin-right:-8px}
+.card-preview .mc-c:last-child{background:#f79e1b;opacity:.9}
+.supported{font-size:.78rem;color:var(--muted);text-align:center}
+.supported span{color:var(--text);font-weight:600}
+
+/* ── CONTACT ── */
+#contact{background:var(--bg3)}
+.contact-wrap{display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-top:3rem}
+.contact-info h3{font-family:var(--font-head);font-size:1.5rem;font-weight:700;margin-bottom:.8rem}
+.contact-info p{color:var(--muted);margin-bottom:2rem;font-size:.93rem}
+.ci-list{display:flex;flex-direction:column;gap:1rem}
+.ci{display:flex;align-items:center;gap:1rem;font-size:.9rem;color:var(--muted)}
+.ci-icon{width:38px;height:38px;background:var(--card);border:1px solid var(--border);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.95rem}
+form{display:flex;flex-direction:column;gap:1.1rem}
+.fg{display:flex;flex-direction:column;gap:.4rem}
+.fg label{font-size:.75rem;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.fg input,.fg textarea,.fg select{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.8rem 1rem;color:var(--text);font-family:var(--font-body);font-size:.93rem;outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--gold)}
+.fg textarea{resize:vertical;min-height:96px}
+.fg select option{background:var(--card)}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.ok-msg{display:none;background:rgba(0,201,167,.08);border:1px solid rgba(0,201,167,.25);border-radius:var(--radius-sm);padding:.9rem;color:var(--teal);font-size:.88rem;text-align:center}
+
+/* ── JOIN ── */
+#join{text-align:center}
+.join-wrap{max-width:620px;margin:0 auto}
+.join-wrap h2{margin-bottom:.9rem}
+.join-wrap .lead{margin-bottom:2rem}
+.join-form{display:flex;flex-direction:column;gap:1.1rem;text-align:left;margin-top:2rem}
+.jfr{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+
+/* ── FOOTER ── */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:3.5rem 6% 2rem}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:2.5rem}
+.ft-brand p{color:var(--muted);font-size:.85rem;margin-top:.7rem;max-width:240px;line-height:1.7}
+.ft-col h4{font-family:var(--font-head);font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:1rem}
+.ft-col a{display:block;color:var(--muted);text-decoration:none;font-size:.86rem;margin-bottom:.55rem;transition:color .2s}
+.ft-col a:hover{color:var(--gold)}
+.footer-bot{border-top:1px solid var(--border);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;font-size:.8rem;color:var(--muted);flex-wrap:wrap;gap:.5rem}
+.footer-bot b{color:var(--gold)}
+.stripe-note{display:flex;align-items:center;gap:.4rem;font-size:.78rem;color:var(--muted)}
+.stripe-note svg{width:40px;fill:rgba(255,255,255,.25)}
+
+/* ── REVEAL ── */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease}
+.rv.in{opacity:1;transform:translateY(0)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  #about{grid-template-columns:1fr}
+  #loans{grid-template-columns:1fr}
+  .pay-grid{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .burger{display:flex}
+  .hero{padding-top:6rem}
+  .contact-wrap{grid-template-columns:1fr}
+  .footer-top{grid-template-columns:1fr 1fr}
+  .fr,.jfr{grid-template-columns:1fr}
+}
+@media(max-width:540px){
+  .hero-stats{gap:1.8rem}
+  .about-visual{grid-template-columns:1fr}
+  .acard.span2{grid-column:span 1}
+  .footer-top{grid-template-columns:1fr}
+  .footer-bot{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="logo" href="#">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    </div>
+    <span class="logo-name">Zarafi</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#rules">Rules</a></li>
+    <li><a href="#loans">Loans</a></li>
+    <li><a href="#payments">Payments</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a class="nav-btn" href="#join">Join Now</a></li>
+  </ul>
+  <div class="burger" onclick="toggleMob()"><span></span><span></span><span></span></div>
+</nav>
+<div class="mob-nav" id="mobNav">
+  <a href="#about" onclick="closeMob()">About</a>
+  <a href="#how" onclick="closeMob()">How It Works</a>
+  <a href="#rules" onclick="closeMob()">Rules</a>
+  <a href="#loans" onclick="closeMob()">Loans</a>
+  <a href="#payments" onclick="closeMob()">Payments</a>
+  <a href="#contact" onclick="closeMob()">Contact</a>
+  <a href="#join" onclick="closeMob()" class="gold">Join Now →</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid-line"></div>
+  <div class="hero-orb1"></div>
+  <div class="hero-orb2"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>Now accepting new members</div>
+    <h1>Your money works<br>harder <em>together.</em></h1>
+    <p class="hero-sub">Zarafi is a digital chama platform — save weekly, grow your pool, and access loans backed by your community. Built for trust. Powered by transparency.</p>
+    <div class="cta-row">
+      <a class="btn-gold" href="#join">Join the Chama →</a>
+      <a class="btn-ghost" href="#how">See how it works</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-val">3<b>×</b></div>
+        <div class="stat-lbl">Your savings as max loan</div>
+      </div>
+      <div>
+        <div class="stat-val">$50–<b>300</b></div>
+        <div class="stat-lbl">Weekly savings range</div>
+      </div>
+      <div>
+        <div class="stat-val">4</div>
+        <div class="stat-lbl">Flexible loan terms</div>
+      </div>
+      <div>
+        <div class="stat-val"><b>$50</b></div>
+        <div class="stat-lbl">Penalty for missed week</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="center rv">
+    <div class="tag">Process</div>
+    <h2>How Zarafi works</h2>
+    <p class="lead">Six clear steps from application to financial growth with your community.</p>
+  </div>
+  <div class="steps">
+    <div class="step rv">
+      <div class="step-n">01</div>
+      <h3>Apply for membership</h3>
+      <p>Submit your application online with your details. An admin reviews and approves it — you'll get login credentials once active.</p>
+    </div>
+    <div class="step rv">
+      <div class="step-n">02</div>
+      <h3>Make weekly savings</h3>
+      <p>Contribute $50–$300 every week, mainly on weekends. Your savings build your loan eligibility and grow the community pool.</p>
+    </div>
+    <div class="step rv">
+      <div class="step-n">03</div>
+      <h3>Track your finances</h3>
+      <p>Your personal dashboard shows all savings, payments, penalties, and loan activity — clear, real-time, and yours alone.</p>
+    </div>
+    <div class="step rv">
+      <div class="step-n">04</div>
+      <h3>Apply for a loan</h3>
+      <p>Need funds? Apply for up to 3× your savings. Select guarantors from fellow members and pick a repayment plan that suits you.</p>
+    </div>
+    <div class="step rv">
+      <div class="step-n">05</div>
+      <h3>Get approved & repay</h3>
+      <p>Admin reviews your application and guarantors confirm. Once disbursed, repay on your schedule — fortnightly or monthly.</p>
+    </div>
+    <div class="step rv">
+      <div class="step-n">06</div>
+      <h3>Stay in the loop</h3>
+      <p>Get notified about due payments, missed contributions, loan approvals, and chama announcements — never miss a beat.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-visual rv">
+    <div class="acard">
+      <div class="icon g">💰</div>
+      <div class="big">100%</div>
+      <div class="alab">Transparent — every transaction logged</div>
+    </div>
+    <div class="acard">
+      <div class="icon t">🔒</div>
+      <div class="big">SSL</div>
+      <div class="alab">Encrypted and secure platform</div>
+    </div>
+    <div class="acard span2">
+      <div class="icon g">🤝</div>
+      <h4>Built on peer accountability</h4>
+      <p>Guarantors, shared savings, and community oversight mean every member has skin in the game — and everyone grows together.</p>
+    </div>
+  </div>
+  <div class="about-text rv">
+    <div class="tag">About Zarafi</div>
+    <h2>A chama built on trust &amp; transparency</h2>
+    <p class="lead">Zarafi combines the spirit of traditional chama values with the power of a modern digital finance platform. We make cooperative savings accessible, trackable, and fair for every member.</p>
+    <ul>
+      <li>Members save weekly and build a collective financial base</li>
+      <li>Loans are backed by member savings and peer guarantors</li>
+      <li>Every contribution, penalty, and repayment is on record</li>
+      <li>Administrators manage the chama with full visibility</li>
+      <li>Accountability is built into every step of the process</li>
+      <li>Stripe-powered payments for global card support</li>
+    </ul>
+    <div style="margin-top:2rem">
+      <a class="btn-gold" href="#join">Become a member →</a>
+    </div>
+  </div>
+</section>
+
+<!-- RULES -->
+<section id="rules">
+  <div class="center rv">
+    <div class="tag">Guidelines</div>
+    <h2>Membership rules</h2>
+    <p class="lead">Clear rules ensure fairness and accountability for every member of Zarafi.</p>
+  </div>
+  <div class="rules-grid">
+    <div class="rule rv">
+      <div class="rule-ico g">💵</div>
+      <div>
+        <h3>Weekly savings range</h3>
+        <p>Every member must contribute between <strong>$50 and $300</strong> per week. Contributions are expected mainly on weekends.</p>
+      </div>
+    </div>
+    <div class="rule rv">
+      <div class="rule-ico r">⚠️</div>
+      <div>
+        <h3>Missed contribution penalty</h3>
+        <p>Members who miss a weekly contribution will be flagged and a <strong>$50 penalty</strong> will be applied to their account.</p>
+      </div>
+    </div>
+    <div class="rule rv">
+      <div class="rule-ico g">📊</div>
+      <div>
+        <h3>Loan limit: 3× savings</h3>
+        <p>The maximum loan a member can take is <strong>three times their total savings</strong>. Guarantor savings also factor in.</p>
+      </div>
+    </div>
+    <div class="rule rv">
+      <div class="rule-ico t">🤝</div>
+      <div>
+        <h3>Guarantor requirement</h3>
+        <p>All loan applications must include guarantors. If a borrower defaults, their <strong>guarantors are held responsible</strong>.</p>
+      </div>
+    </div>
+    <div class="rule rv">
+      <div class="rule-ico t">📅</div>
+      <div>
+        <h3>Repayment schedule</h3>
+        <p>Repayment terms and installment amounts are defined at approval. Members <strong>must adhere to the schedule</strong>.</p>
+      </div>
+    </div>
+    <div class="rule rv">
+      <div class="rule-ico g">🔍</div>
+      <div>
+        <h3>Full transparency</h3>
+        <p>All transactions — savings, loans, penalties, repayments — are <strong>recorded and visible</strong> to each member.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOANS -->
+<section id="loans">
+  <div class="rv">
+    <div class="tag">Borrowing</div>
+    <h2>Loan information</h2>
+    <p class="lead">Flexible loan types with clear repayment structures, designed around your needs.</p>
+    <div class="loan-types">
+      <div class="lt">
+        <div class="lt-name">⚡ 2-Week Loan</div>
+        <div class="lt-rep">Single payment after 2 weeks</div>
+      </div>
+      <div class="lt">
+        <div class="lt-name">📅 1-Month Loan</div>
+        <div class="lt-rep">Single payment after 4 weeks</div>
+      </div>
+      <div class="lt">
+        <div class="lt-name">📆 2-Month Loan</div>
+        <div class="lt-rep">4 equal fortnightly payments</div>
+      </div>
+      <div class="lt">
+        <div class="lt-name">🗓️ 3-Month Loan</div>
+        <div class="lt-rep">3 equal monthly payments</div>
+      </div>
+    </div>
+  </div>
+  <div class="elig-box rv">
+    <h3>How eligibility works</h3>
+    <div class="formula">
+      <div class="val">Your savings × 3</div>
+      <div class="sub">= Maximum loan amount</div>
+    </div>
+    <p class="elig-note">
+      Eligibility is calculated from your total savings plus your guarantors' combined savings — which must cover the loan requested.<br><br>
+      <strong>Example:</strong> With $1,000 saved, you can borrow up to $3,000 — provided your guarantors meet the savings threshold too.<br><br>
+      Members see their full repayment schedule — due dates, installment amounts, and outstanding balance — directly in their dashboard.
+    </p>
+  </div>
+</section>
+
+<!-- PAYMENTS (STRIPE) -->
+<section id="payments">
+  <div class="center rv">
+    <div class="tag">Payments</div>
+    <h2>Secure payments via Stripe</h2>
+    <p class="lead">Zarafi uses Stripe to process all contributions and loan repayments — your card data never touches our servers.</p>
+  </div>
+  <div class="pay-grid">
+    <div class="pay-features rv">
+      <div class="pf">
+        <div class="pf-ico">🛡️</div>
+        <div>
+          <h4>PCI-DSS compliant</h4>
+          <p>Stripe handles all card processing to the highest security standards. We never store your card details.</p>
+        </div>
+      </div>
+      <div class="pf">
+        <div class="pf-ico">💳</div>
+        <div>
+          <h4>Mastercard &amp; Visa supported</h4>
+          <p>Pay your weekly savings or loan repayments using your Mastercard, Visa, or any major international card.</p>
+        </div>
+      </div>
+      <div class="pf">
+        <div class="pf-ico">⚡</div>
+        <div>
+          <h4>Instant confirmation</h4>
+          <p>Payments reflect on your account immediately. Your savings history and repayment records update in real time.</p>
+        </div>
+      </div>
+      <div class="pf">
+        <div class="pf-ico">🌍</div>
+        <div>
+          <h4>Global card support</h4>
+          <p>Members can contribute from anywhere in the world using their preferred card — no geographic restrictions.</p>
+        </div>
+      </div>
+    </div>
+    <div class="stripe-card rv">
+      <div class="stripe-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        Powered by Stripe
+      </div>
+      <h3>Pay with your card</h3>
+      <p>Contributions and repayments are processed securely through Stripe's checkout — smooth, fast, and reliable.</p>
+      <div class="card-preview">
+        <div class="chip"></div>
+        <div class="card-num">•••• •••• •••• 4242</div>
+        <div class="card-bot">
+          <span>ZARAFI MEMBER</span>
+          <div class="mc">
+            <div class="mc-c"></div>
+            <div class="mc-c"></div>
+          </div>
+        </div>
+      </div>
+      <p class="supported">Accepts <span>Mastercard</span>, <span>Visa</span>, <span>American Express</span> &amp; more</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="rv">
+    <div class="tag">Get in touch</div>
+    <h2>Contact us</h2>
+  </div>
+  <div class="contact-wrap">
+    <div class="contact-info rv">
+      <h3>We're here to help</h3>
+      <p>Have questions about membership, savings, or loans? Reach out and our team will respond promptly.</p>
+      <div class="ci-list">
+        <div class="ci"><div class="ci-icon">📧</div><span>hello@zarafi.co.ke</span></div>
+        <div class="ci"><div class="ci-icon">📞</div><span>+254 700 000 000</span></div>
+        <div class="ci"><div class="ci-icon">📍</div><span>Nairobi, Kenya</span></div>
+        <div class="ci"><div class="ci-icon">🕐</div><span>Mon–Fri, 8am – 6pm EAT</span></div>
+      </div>
+    </div>
+    <form class="rv" onsubmit="submitContact(event)">
+      <div class="fr">
+        <div class="fg"><label>First name</label><input type="text" placeholder="John" required/></div>
+        <div class="fg"><label>Last name</label><input type="text" placeholder="Kamau" required/></div>
+      </div>
+      <div class="fg"><label>Email</label><input type="email" placeholder="john@email.com" required/></div>
+      <div class="fg">
+        <label>Subject</label>
+        <select>
+          <option>General enquiry</option>
+          <option>Membership question</option>
+          <option>Loan information</option>
+          <option>Payment support</option>
+          <option>Technical support</option>
+        </select>
+      </div>
+      <div class="fg"><label>Message</label><textarea placeholder="How can we help you?"></textarea></div>
+      <button class="btn-gold" type="submit" style="align-self:flex-start">Send message →</button>
+      <div class="ok-msg" id="contactOk">✅ Message sent! We'll be in touch shortly.</div>
+    </form>
+  </div>
+</section>
+
+<!-- JOIN -->
+<section id="join">
+  <div class="join-wrap">
+    <div class="rv">
+      <div class="tag">Membership</div>
+      <h2>Ready to join Zarafi?</h2>
+      <p class="lead">Submit your application below. Our team reviews every application within 2 business days.</p>
+    </div>
+    <form class="join-form rv" onsubmit="submitJoin(event)">
+      <div class="jfr">
+        <div class="fg"><label>First name</label><input type="text" placeholder="John" required/></div>
+        <div class="fg"><label>Last name</label><input type="text" placeholder="Kamau" required/></div>
+      </div>
+      <div class="jfr">
+        <div class="fg"><label>Email address</label><input type="email" placeholder="john@email.com" required/></div>
+        <div class="fg"><label>Phone number</label><input type="tel" placeholder="+254 700 000 000" required/></div>
+      </div>
+      <div class="fg"><label>National ID / Passport</label><input type="text" placeholder="e.g. 12345678" required/></div>
+      <div class="fg"><label>Why do you want to join Zarafi?</label><textarea placeholder="Tell us about yourself and your savings goals..." style="min-height:110px"></textarea></div>
+      <button class="btn-gold" type="submit" style="width:100%;justify-content:center;padding:1rem;font-size:1rem">Submit application →</button>
+      <div class="ok-msg" id="joinOk">🎉 Application submitted! We'll review it and be in touch within 2 business days.</div>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="ft-brand">
+      <a class="logo" href="#">
+        <div class="logo-mark"><svg viewBox="0 0 24 24" fill="#08080e"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-name">Zarafi</span>
+      </a>
+      <p>A digital chama platform for community savings, loans, and financial growth.</p>
+    </div>
+    <div class="ft-col">
+      <h4>Navigate</h4>
+      <a href="#about">About</a>
+      <a href="#how">How It Works</a>
+      <a href="#rules">Rules</a>
+      <a href="#loans">Loans</a>
+      <a href="#payments">Payments</a>
+    </div>
+    <div class="ft-col">
+      <h4>Account</h4>
+      <a href="#">Member login</a>
+      <a href="#join">Join / Register</a>
+      <a href="#">Admin portal</a>
+    </div>
+    <div class="ft-col">
+      <h4>Contact</h4>
+      <a href="#">hello@zarafi.co.ke</a>
+      <a href="#">+254 700 000 000</a>
+      <a href="#">Nairobi, Kenya</a>
+    </div>
+  </div>
+  <div class="footer-bot">
+    <span>© 2025 <b>Zarafi</b>. All rights reserved.</span>
+    <div class="stripe-note">Payments secured by Stripe</div>
+  </div>
+</footer>
+
+<script>
+// Nav scroll
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('scrolled',scrollY>20)
+})
+
+// Mobile nav
+function toggleMob(){document.getElementById('mobNav').classList.toggle('open')}
+function closeMob(){document.getElementById('mobNav').classList.remove('open')}
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('in'), i*90)
+      observer.unobserve(e.target)
+    }
+  })
+},{threshold:0.1})
+document.querySelectorAll('.rv').forEach(el=>observer.observe(el))
+
+// Forms
+function submitContact(e){
+  e.preventDefault()
+  document.getElementById('contactOk').style.display='block'
+}
+function submitJoin(e){
+  e.preventDefault()
+  document.getElementById('joinOk').style.display='block'
+}
+</script>
+</body>
+</html>
