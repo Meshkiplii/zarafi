@@ -2,7 +2,7 @@
 // ZARAFI — app.js  (complete working version)
 // ============================================================
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://zarafi-production.up.railway.app/api';
 const STRIPE_PK = 'pk_test_51TWNGHEo39TOLmD52j9eABIzwvm4bmjipM63pANbRspnfBBfLkPiQMjz7RlSj4wxnHZcMdh95AFBDgQZLNf7UlR400Beid5pls'; // your publishable key
 let stripeInstance = null;
 

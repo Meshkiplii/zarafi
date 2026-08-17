@@ -14,7 +14,7 @@ app.use(cors({
   'http://127.0.0.1:5500',
   'https://zarafiapp.com',
   'https://www.zarafiapp.com',
-  'https://your-netlify-app.netlify.app', // ← update after Netlify deploy
+  'https://zarafi.vercel.app',
 ],
   credentials: true,
 }));
