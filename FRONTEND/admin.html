@@ -530,7 +530,7 @@ tr:hover td{background:rgba(255,255,255,.015)}
     <div style="font-size:.82rem;color:var(--muted);line-height:2">
 <div id="modal-member-email">📧 —</div>
 <div id="modal-member-phone">📞 —</div>
-      <div id="modal-member-id">🪪 ID: —</div>
+      <div id="modal-member-id" style="display:none">🪪 ID: —</div>
 <div id="modal-member-joined">📅 Joined: —</div>
     </div>
     <div style="display:flex;gap:.8rem;margin-top:1.2rem">
@@ -598,7 +598,6 @@ function viewMember(member) {
   document.getElementById('modal-member-name').textContent     = member.first_name + ' ' + member.last_name;
   document.getElementById('modal-member-email').textContent    = '📧 ' + (member.email || '—');
   document.getElementById('modal-member-phone').textContent    = '📞 ' + (member.phone || '—');
-  document.getElementById('modal-member-id').textContent       = '🪪 ID: ' + (member.national_id || '—');
   document.getElementById('modal-member-joined').textContent   = '📅 Joined: ' + (member.created_at ? new Date(member.created_at).toLocaleDateString() : '—');
   document.getElementById('modal-total-savings').textContent   = 'AUD ' + parseFloat(member.total_savings || 0).toLocaleString();
   document.getElementById('modal-max-loan').textContent        = 'AUD ' + parseFloat((member.total_savings || 0) * 3).toLocaleString();

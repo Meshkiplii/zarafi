@@ -46,10 +46,29 @@ router.post('/apply', protect, async (req, res) => {
       );
     }
 
+    // Loans within the savings×3 limit are now auto-approved and auto-disbursed —
+    // no manual admin review step. The savings×3 check above already gatekeeps eligibility.
+    const now = new Date();
+    await db.query(
+      "UPDATE loans SET status='active', approved_at=?, disbursed_at=? WHERE id=?",
+      [now, now, loanId]
+    );
+
+    const schedule = buildSchedule(amount, loan_type, now);
+    for (const s of schedule)
+      await db.query(
+        'INSERT INTO repayments (loan_id, installment_number, amount_due, due_date) VALUES (?,?,?,?)',
+        [loanId, s.n, s.amt, s.due]
+      );
+
+    await notify(req.user.id, 'Loan Approved & Disbursed',
+      `Your loan of A$${parseFloat(amount).toFixed(2)} has been approved and disbursed. Check your repayment schedule.`, 'loan'
+    );
+
     const [admins] = await db.query("SELECT id FROM users WHERE role='admin'");
     for (const admin of admins)
-      await notify(admin.id, 'New Loan Application',
-        `A new loan application for A$${parseFloat(amount).toFixed(2)} is awaiting review.`, 'loan'
+      await notify(admin.id, 'Loan Auto-Approved',
+        `A A$${parseFloat(amount).toFixed(2)} loan was automatically approved and disbursed.`, 'loan'
       );
 
     const [[loan]] = await db.query('SELECT * FROM loans WHERE id=?', [loanId]);

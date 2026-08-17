@@ -123,7 +123,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);display
 
   <!-- ── SIGNUP VIEW ── -->
   <div class="view" id="view-signup">
-    <div class="form-title">Join Zarafi</div>
+    <div class="form-title">Sign up</div>
     <div class="form-sub">Submit your membership application</div>
 
     <div class="row2">
@@ -136,7 +136,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);display
     </div>
     <div class="fg"><label>Password</label><input type="password" id="s-pass" placeholder="At least 6 characters"/></div>
     <div class="fg">
-      <label>Why do you want to join? <span style="color:var(--muted);font-weight:400;text-transform:none">(optional)</span></label>
       <input type="text" id="s-reason" placeholder="e.g. Save for school fees, grow my money..."/>
     </div>
     <button class="btn-gold" id="signup-btn" onclick="doSignup()">Submit Application →</button>
@@ -171,9 +170,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);display
     <div class="alert ok"  id="reset-ok"></div>
     <div class="links">Back to <a href="#" onclick="switchTab('login')">Sign in →</a></div>
   </div>
-
 </div>
-
 <script>
 function switchTab(tab) {
   document.querySelectorAll('.tab').forEach((t, i) =>

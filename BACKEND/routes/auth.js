@@ -37,14 +37,15 @@ if (!first_name || !last_name || !email || !password || !phone) {
     // ✅ Auto-hash the password — member never needs to do this manually
     const password_hash = await bcrypt.hash(password, 10);
 
+    // Members are now activated automatically on signup — no manual admin approval step
     await db.query(
       `INSERT INTO users 
         (first_name, last_name, email, password_hash, phone, join_reason, role, status)
-       VALUES (?, ?, ?, ?, ?, ?, 'member', 'pending')`,
+       VALUES (?, ?, ?, ?, ?, ?, 'member', 'active')`,
       [first_name, last_name, email, password_hash, phone, join_reason || null]
     );
 
-    res.status(201).json({ message: 'Application submitted. Awaiting admin approval.' });
+    res.status(201).json({ message: 'Account created! You can now log in.' });
 
   } catch (err) {
     console.error(err);
