@@ -15,8 +15,10 @@ CREATE TABLE IF NOT EXISTS users (
   password_hash VARCHAR(255)  NOT NULL,
   role          ENUM('member','admin') DEFAULT 'member',
   status        ENUM('pending','active','suspended') DEFAULT 'pending',
-  join_reason   TEXT,
-  created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  join_reason         TEXT,
+  reset_token         VARCHAR(255) NULL,
+  reset_token_expires TIMESTAMP NULL,
+  created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX idx_users_role   (role),
   INDEX idx_users_status (status)
@@ -151,5 +153,5 @@ CREATE TABLE IF NOT EXISTS announcements (
 -- SECURITY WARNING: Change this password immediately after first login.
 INSERT IGNORE INTO users (first_name, last_name, email, password_hash, role, status)
 VALUES ('Zarafi', 'Admin', 'admin@zarafi.co.ke',
-        '$2a$10$.BTSBcx5REAgd7EHonOxjOeie8tgFn1kRpqTuVAo5vakBhCRqyWmm',
+        '$2a$10$hZZmLL1tSmPEJ3ITGJCppOigIINxt7e94aLbOI0az1Rx3ImZDyJZ.',
         'admin', 'active');
