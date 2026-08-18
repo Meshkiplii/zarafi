@@ -153,5 +153,5 @@ CREATE TABLE IF NOT EXISTS announcements (
 -- SECURITY WARNING: Change this password immediately after first login.
 INSERT IGNORE INTO users (first_name, last_name, email, password_hash, role, status)
 VALUES ('Zarafi', 'Admin', 'admin@zarafi.co.ke',
-        '$2a$10$.BTSBcx5REAgd7EHonOxjOeie8tgFn1kRpqTuVAo5vakBhCRqyWmm',
+        '$2a$10$hZZmLL1tSmPEJ3ITGJCppOigIINxt7e94aLbOI0az1Rx3ImZDyJZ.',
         'admin', 'active');
