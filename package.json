@@ -1,0 +1,9 @@
+{
+  "name": "zarafi-root",
+  "version": "1.0.0",
+  "description": "Zarafi root proxy to build and run the backend monolith",
+  "scripts": {
+    "postinstall": "npm --prefix BACKEND install",
+    "start": "npm --prefix BACKEND start"
+  }
+}

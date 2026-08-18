@@ -4,11 +4,26 @@ This document details all the bugs fixed, cleanups executed, and deployment enha
 
 ---
 
-## 🧹 1. Workspace Cleanups
+## 🧹 1. Workspace Cleanups & Proxy Configurations
 
-### Redundant Root Configurations
-*   **Issue**: The repository root folder contained a redundant `package.json` and `package-lock.json`. These conflicted with the actual Node.js application which resides inside the `/BACKEND` directory.
-*   **Action**: Deleted both root files to prevent dependency confusion.
+### Root Build Configuration (Proxy package.json)
+*   **Issue**: The root directory initially contained redundant package files that caused conflict. However, removing them entirely prevented Railway's buildpacks (Railpack/Nixpacks) from recognizing the project as a Node.js application when scanning the repository root.
+*   **Solution**: Recreated a lightweight proxy `package.json` in the root folder. It uses npm prefix flags to automatically delegate package installation and start triggers to the `/BACKEND` directory:
+    ```json
+    {
+      "name": "zarafi-root",
+      "version": "1.0.0",
+      "scripts": {
+        "postinstall": "npm --prefix BACKEND install",
+        "start": "npm --prefix BACKEND start"
+      }
+    }
+    ```
+    This allows Railway build tools to deploy the application straight from the root folder without manual adjustments.
+
+### Root .gitignore Configuration
+*   **Issue**: The repository lacked a root-level `.gitignore` file, risking the accidental committing of local credentials (such as database passwords, Stripe secret keys, and JWT keys) and large `node_modules` folders.
+*   **Solution**: Added a root-level `.gitignore` file configured to exclude environment configurations, node modules, OS metadata, and IDE settings.
 
 ---
 
