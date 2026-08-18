@@ -15,8 +15,10 @@ CREATE TABLE IF NOT EXISTS users (
   password_hash VARCHAR(255)  NOT NULL,
   role          ENUM('member','admin') DEFAULT 'member',
   status        ENUM('pending','active','suspended') DEFAULT 'pending',
-  join_reason   TEXT,
-  created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  join_reason         TEXT,
+  reset_token         VARCHAR(255) NULL,
+  reset_token_expires TIMESTAMP NULL,
+  created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX idx_users_role   (role),
   INDEX idx_users_status (status)

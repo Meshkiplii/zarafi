@@ -63,7 +63,13 @@ router.post('/login', async (req, res) => {
 
   try {
     const [rows] = await db.query(
-      'SELECT * FROM users WHERE email = ?', [email]
+      `SELECT u.*, 
+              COALESCE(SUM(CASE WHEN s.status='confirmed' THEN s.amount ELSE 0 END), 0) AS total_savings
+       FROM users u
+       LEFT JOIN savings s ON s.user_id = u.id
+       WHERE u.email = ?
+       GROUP BY u.id`,
+      [email]
     );
 
     if (rows.length === 0) {
@@ -92,6 +98,9 @@ router.post('/login', async (req, res) => {
       { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
     );
 
+    const totalSavings = parseFloat(user.total_savings || 0);
+    const maxLoan      = totalSavings * 3;
+
     res.json({
       token,
       user: {
@@ -100,8 +109,8 @@ router.post('/login', async (req, res) => {
         last_name:     user.last_name,
         email:         user.email,
         role:          user.role,
-        total_savings: user.total_savings || 0,
-        max_loan:      user.max_loan      || 0,
+        total_savings: totalSavings,
+        max_loan:      maxLoan,
       }
     });
 

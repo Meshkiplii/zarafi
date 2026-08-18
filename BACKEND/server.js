@@ -1,4 +1,6 @@
-require('dotenv').config();
+const path    = require('path');
+require('dotenv').config({ path: path.resolve(process.cwd(), '.env.local') });
+require('dotenv').config({ path: path.resolve(process.cwd(), '.env') });
 const express = require('express');
 const cors    = require('cors');
 
@@ -29,8 +31,10 @@ app.use('/api/loans',         require('./routes/loans'));
 app.use('/api/payments',      require('./routes/payments'));
 app.use('/api/notifications', require('./routes/notifications'));
 app.use('/api/admin',         require('./routes/admin'));
-// Health check
-app.get('/', (req, res) => res.json({ status: 'ok', app: 'Zarafi API', version: '1.0.0' }));
+
+// Serve static frontend files
+app.use(express.static(path.join(__dirname, '../FRONTEND')));
+
 app.get('/health', (req, res) => res.json({ status: 'healthy' }));
 
 // 404 handler

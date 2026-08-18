@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "nodemailer": "^8.0.7",
-    "stripe": "^22.1.1"
-  }
-}
