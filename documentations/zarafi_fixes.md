@@ -100,9 +100,7 @@ This document details all the bugs fixed, cleanups executed, and deployment enha
 *   **Files**: [`server.js`](file:///c:/Users/ADMIN/Documents/Sharon/zarafi/BACKEND/server.js#L1-L4) & [`db.js`](file:///c:/Users/ADMIN/Documents/Sharon/zarafi/BACKEND/config/db.js#L1-L5)
 *   **Fix**: Updated `dotenv` calls to load `.env.local` first and `.env` second. This facilitates local overrides without leaking details to git repository defaults.
 
-### Automated SQL Database Initializer
-*   **Files**: [`initDb.js`](file:///c:/Users/ADMIN/Documents/Sharon/zarafi/BACKEND/utils/initDb.js) & [`package.json`](file:///c:/Users/ADMIN/Documents/Sharon/zarafi/BACKEND/package.json#L9)
-*   **Fix**: Added a database migration script that connects to the database via your pool config, splits `schema.sql` into individual statements, and runs them. It filters out DB creation/use statements (`CREATE DATABASE`, `USE`) to ensure compatibility with Railway's pre-configured databases. Triggered by running:
-    ```bash
-    npm run db:init
-    ```
+### Automated SQL Database Initializer & Startup Setup
+*   **Files**: [`initDb.js`](file:///c:/Users/ADMIN/Documents/Sharon/zarafi/BACKEND/utils/initDb.js) & [`package.json`](file:///c:/Users/ADMIN/Documents/Sharon/zarafi/BACKEND/package.json#L7)
+*   **Fix**: Added a database migration script that connects to the database via your pool config, splits `schema.sql` into individual statements, and runs them. It filters out DB creation/use statements (`CREATE DATABASE`, `USE`) to ensure compatibility with Railway's pre-configured databases.
+*   **Startup Automation**: Hooked the migration script directly into the backend `"start"` script (`npm start` triggers `node utils/initDb.js && node server.js`). This automatically initializes all tables and seeds the admin user on the remote database on every build/deployment.
